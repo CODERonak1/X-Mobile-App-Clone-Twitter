@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 
 const LoginOrSignup = () => {
+    const navigation = useNavigation();
+
     return (
         <SafeAreaView style={styles.background}>
 
@@ -15,17 +18,17 @@ const LoginOrSignup = () => {
 
             <View style={styles.container}>
                 <Text style={styles.text}>See what's happening in the world right now.</Text>
-                <Text> 
-                    
+                <Text>
+
                 </Text>
             </View>
 
             <View style={styles.btn}>
-                <Pressable style={styles.createAccBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                <Pressable onPress={() => navigation.navigate('Signup')} style={styles.createAccBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
                     <Text style={styles.createAccText}>Create account</Text>
                 </Pressable>
 
-                <Pressable style={styles.loginBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                <Pressable onPress={() => navigation.navigate('Login')} style={styles.loginBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
                     <Text style={styles.loginText}>Login</Text>
                 </Pressable>
 
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
 
     btn: {
     },
-    
+
     createAccBtn: {
         marginTop: -200,
         backgroundColor: 'white',
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
         margin: 'auto',
         padding: 10
     },
-    
+
     createAccText: {
         textAlign: 'center',
         fontWeight: 'bold',
@@ -87,12 +90,10 @@ const styles = StyleSheet.create({
         margin: 'auto',
         padding: 10
     },
-    
+
     loginText: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,
     }
-
-
 })
