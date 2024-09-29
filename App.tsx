@@ -1,20 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
 
-export default function App() {
+// screens
+import LoginOrSignup from './screens/LoginOrSignup';
+
+const Stack = createNativeStackNavigator();
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>This Twiiter Clone</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="LoginOrSignup">
+        <Stack.Screen name="LoginOrSignup" component={LoginOrSignup} options={{
+          headerShown: false
+        }}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 
+export default App;
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+})
