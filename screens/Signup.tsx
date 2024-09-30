@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         flex: 1,
         // justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 140,
+        marginTop: 40,
     },
 
     text: {
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
     },
 
     nextBtn: {
-
         backgroundColor: 'white',
         borderRadius: 50,
         width: '22%',

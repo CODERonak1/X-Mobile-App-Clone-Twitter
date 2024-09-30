@@ -24,12 +24,18 @@ const LoginOrSignup = () => {
             </View>
 
             <View style={styles.btn}>
-                <Pressable onPress={() => navigation.navigate('Signup')} style={styles.createAccBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
-                    <Text style={styles.createAccText}>Create account</Text>
+                <Pressable onPress={() => navigation.navigate('Signup')} style={styles.button} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                    <Text style={styles.btnText}>Create account</Text>
                 </Pressable>
 
-                <Pressable onPress={() => navigation.navigate('Login')} style={styles.loginBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
-                    <Text style={styles.loginText}>Login</Text>
+                <Pressable onPress={() => navigation.navigate('Login')} style={styles.button} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                    <Text style={styles.btnText}>Login</Text>
+                </Pressable>
+
+                <Text style={styles.or}>or</Text>
+
+                <Pressable onPress={() => navigation.navigate('Login')} style={styles.button} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                    <Text style={styles.btnText}>Be Anonymous</Text>
                 </Pressable>
 
             </View>
@@ -48,7 +54,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        marginTop: 250,
+        marginTop: 100,
 
     },
     text: {
@@ -63,37 +69,31 @@ const styles = StyleSheet.create({
         width: 45,
         margin: 'auto'
     },
-
+    
     btn: {
+        // flex: 1
+        position: 'relative',
+        bottom: 200
     },
-
-    createAccBtn: {
-        marginTop: -200,
+    button: {
         backgroundColor: 'white',
         borderRadius: 50,
         width: '80%',
         margin: 'auto',
-        padding: 10
+        padding: 10,
+        marginTop: 20
     },
 
-    createAccText: {
+    btnText: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,
     },
 
-    loginBtn: {
-        marginTop: -70,
-        backgroundColor: 'white',
-        borderRadius: 50,
-        width: '80%',
-        margin: 'auto',
-        padding: 10
-    },
-
-    loginText: {
+    or: {
+        color: 'grey',
         textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 18,
+        marginTop: 20,
     }
 })
