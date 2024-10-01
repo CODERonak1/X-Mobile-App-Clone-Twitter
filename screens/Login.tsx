@@ -32,7 +32,7 @@ const Signup = () => {
     return (
         <SafeAreaView style={styles.background}>
 
-            <Text style={styles.text}>To get started, first enter your phone, email or @username </Text>
+            <Text style={styles.text}>To get started, first enter your email and password. </Text>
 
             <View style={styles.container}>
                 <TextInput
