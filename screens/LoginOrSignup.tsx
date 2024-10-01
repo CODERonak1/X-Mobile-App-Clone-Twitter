@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
     },
 
     xLogo: {
-        height: 45,
-        width: 45,
+        height: 35,
+        width: 35,
         margin: 'auto'
     },
     

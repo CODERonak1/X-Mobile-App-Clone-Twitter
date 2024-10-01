@@ -103,20 +103,7 @@ const App = () => {
           headerTintColor: 'white'
         }} />
 
-        <Stack.Screen name="Feed" component={Feed} options={{
-          headerTitle: () => (
-            <Image
-              source={require('./assets/XWhite.png')}
-              style={{ width:35, height: 35}}
-              resizeMode="contain"
-            />
-          ),
-          headerTitleAlign: 'center',
-          headerStyle: {
-            backgroundColor: 'black'
-          },
-          headerTintColor: 'white'
-        }} />
+        <Stack.Screen name="Feed" component={Feed} options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

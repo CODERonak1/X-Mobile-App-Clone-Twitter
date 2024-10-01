@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, } from 'react-native';
+import { StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -6,6 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 const Feed = () => {
     return (
         <SafeAreaView style={styles.background}>
+
+            <Image
+                style={styles.xLogo}
+                source={
+                    require('../assets/XWhite.png')
+                }
+            />
+
             <View style={styles.container}>
                 <Text style={styles.text}>Feed</Text>
             </View>
@@ -32,5 +40,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 30,
         fontWeight: 'bold',
-    }
+    },
+
+    xLogo: {
+        height: 35,
+        width: 35,
+        margin: 'auto'
+    },
 })
