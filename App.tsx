@@ -1,15 +1,43 @@
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native'; // Added Image import
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import { useEffect, useState } from 'react'; // Import useEffect and useState
+import { auth } from './firebaseConfig';
 
 // screens
 import LoginOrSignup from './screens/LoginOrSignup';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
+import Demo from './screens/Demo';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
+
+  const [isLoading, setIsLoading] = useState(true); 
+  const [user, setUser] = useState(null); 
+
+
+  
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+      setIsLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+    
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LoginOrSignup">
@@ -45,6 +73,8 @@ const App = () => {
           headerTintColor: 'white'
 
         }} />
+
+        <Stack.Screen name="Demo" component={Demo} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -52,4 +82,15 @@ const App = () => {
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  loadingText: {
+    color: 'white',
+    fontSize: 20,
+  },
+});

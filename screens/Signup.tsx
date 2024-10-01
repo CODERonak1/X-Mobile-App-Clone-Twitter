@@ -2,89 +2,87 @@ import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { auth } from '../firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Signup = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isFocusedInput, setIsFocusedInput] = useState('');
+
     const navigation = useNavigation();
 
-    const [name, setName] = useState('');
-    const [isFocusedInput, setIsFocusedInput] = useState('')
-    const [isPhOrEmail, setIsPhOrEmail] = useState('')
-    const [dob, setDob] = useState('');
+    const handleSignup = async () => {
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            console.log('Sign up successful');
+
+            navigation.navigate('Demo');
+        } catch (error) {
+            console.error('Signup Error:', error);
+        }
+    };
 
     return (
         <SafeAreaView style={styles.background}>
-
             <Text style={styles.text}>Create your account</Text>
 
             <View style={styles.container}>
                 <TextInput
-                    style={[styles.input, isFocusedInput === 'name' && styles.focusInput]}
-                    placeholder="Your name"
-                    value={name}
-                    onChangeText={newName => setName(newName)}
+                    style={[styles.input, isFocusedInput === 'email' && styles.focusInput]}
+                    placeholder="Email address"
+                    value={email}
+                    onChangeText={setEmail}
                     placeholderTextColor="gray"
-                    maxLength={50}
                     cursorColor={'#3493d6'}
-                    onFocus={() => setIsFocusedInput('name')}
+                    keyboardType="email-address"
+                    onFocus={() => setIsFocusedInput('email')}
                     onBlur={() => setIsFocusedInput('')}
                 />
 
                 <TextInput
-                    style={[styles.input, isFocusedInput === 'ph' && styles.focusInput]}
-                    placeholder="Phone number or email address"
-                    value={isPhOrEmail}
-                    onChangeText={newPhOrEmail => setIsPhOrEmail(newPhOrEmail)}
+                    style={[styles.input, isFocusedInput === 'password' && styles.focusInput]}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
                     placeholderTextColor="gray"
                     cursorColor={'#3493d6'}
-                    onFocus={() => setIsFocusedInput('ph')}
+                    secureTextEntry={true}
+                    onFocus={() => setIsFocusedInput('password')}
                     onBlur={() => setIsFocusedInput('')}
-                />
-
-                <TextInput
-                    style={[styles.input, isFocusedInput === 'dob' && styles.focusInput]}
-                    placeholder="Date of birth in DD/MM/YY"
-                    value={dob}
-                    onChangeText={newDob => setDob(newDob)}
-                    placeholderTextColor="gray"
-                    cursorColor={'#3493d6'}
-                    onFocus={() => setIsFocusedInput('dob')}
-                    onBlur={() => setIsFocusedInput('')}
-
                 />
             </View>
 
             <View>
-                <Pressable onPress={() => navigation.navigate('Login')} style={styles.nextBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
-                    <Text style={styles.nextText}>Next</Text>
+                <Pressable
+                    onPress={handleSignup}
+                    style={styles.nextBtn}
+                    android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                    <Text style={styles.nextText}>Sign up</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 export default Signup;
 
 const styles = StyleSheet.create({
-
     background: {
         backgroundColor: 'black',
         height: '100%',
     },
-
     container: {
         flex: 1,
-        // justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
     },
-
     text: {
         fontSize: 30,
         fontWeight: 'bold',
         color: 'white',
-        marginLeft: 30
+        marginLeft: 30,
     },
-
     input: {
         fontSize: 18,
         padding: 18,
@@ -94,26 +92,23 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         width: '80%',
         borderRadius: 6,
-        color: 'white'
+        color: 'white',
     },
-
     focusInput: {
         borderWidth: 2,
-        borderColor: '#3493d6'
+        borderColor: '#3493d6',
     },
-
     nextBtn: {
         backgroundColor: 'white',
         borderRadius: 50,
         width: '22%',
-        margin: 'auto',
         padding: 5,
         marginBottom: 10,
+        margin: 'auto',
     },
-
     nextText: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 18,
-    }
-})
+    },
+});

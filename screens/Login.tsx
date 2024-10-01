@@ -1,13 +1,33 @@
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { auth } from '../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Signup = () => {
     const navigation = useNavigation();
 
     const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
     const [isFocusedInput, setIsFocusedInput] = useState('')
+
+    const handleSignin = async () => {
+        try {
+            await signInWithEmailAndPassword(auth, name, password);
+            console.log('Sign in successful');
+
+            navigation.navigate('Demo');
+        } catch (error) {
+
+            if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                Alert.alert('Login Error', 'Invalid email or password. Please try again.', [{ text: 'OK' }]);
+            } else {
+                Alert.alert('Login Error', 'An unexpected error occurred. Please try again later.', [{ text: 'OK' }]);
+            }
+            console.log('Sign in Error:', error);
+        }
+    }
 
     return (
         <SafeAreaView style={styles.background}>
@@ -17,16 +37,27 @@ const Signup = () => {
             <View style={styles.container}>
                 <TextInput
                     style={[styles.input, isFocusedInput === 'name' && styles.focusInput]}
-                    placeholder="Phone, email or username"
+                    placeholder="Email"
                     value={name}
                     onChangeText={newLogin => setName(newLogin)}
                     placeholderTextColor="gray"
-                    maxLength={50}
+                    keyboardType="email-address"
                     cursorColor={'#3493d6'}
                     onFocus={() => setIsFocusedInput('name')}
                     onBlur={() => setIsFocusedInput('')}
                 />
 
+                <TextInput
+                    style={[styles.input, isFocusedInput === 'password' && styles.focusInput]}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholderTextColor="gray"
+                    cursorColor={'#3493d6'}
+                    secureTextEntry={true}
+                    onFocus={() => setIsFocusedInput('password')}
+                    onBlur={() => setIsFocusedInput('')}
+                />
 
             </View>
 
@@ -35,8 +66,8 @@ const Signup = () => {
                     <Text style={styles.forgotPassText}>Forgot password?</Text>
                 </Pressable>
 
-                <Pressable onPress={() => navigation.navigate('Login')} style={styles.nextBtn} android_ripple={{ color: '#fffff', borderless: false, foreground: true }}>
-                    <Text style={styles.nextText}>Next</Text>
+                <Pressable onPress={handleSignin} style={styles.loginBtn} android_ripple={{ color: '#fffff', borderless: false, foreground: true }}>
+                    <Text style={styles.loginText}>Login</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
@@ -53,10 +84,12 @@ const styles = StyleSheet.create({
     },
 
     container: {
-        flex: 1,
+        // flex: 1,
         // justifyContent: 'center',
         alignItems: 'center',
         marginTop: 140,
+        position: 'relative',
+        bottom: 100
     },
 
     text: {
@@ -71,11 +104,12 @@ const styles = StyleSheet.create({
         padding: 18,
         borderWidth: 1,
         borderColor: 'white',
-        marginTop: -100,
         paddingLeft: 20,
         width: '90%',
         borderRadius: 6,
-        color: 'white'
+        color: 'white',
+        marginTop: 30,
+        
     },
 
     focusInput: {
@@ -99,7 +133,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
 
-    nextBtn: {
+    loginBtn: {
         backgroundColor: 'white',
         borderRadius: 50,
         width: '22%',
@@ -108,7 +142,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
 
-    nextText: {
+    loginText: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 18,
