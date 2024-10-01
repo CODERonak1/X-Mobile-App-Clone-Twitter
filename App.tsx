@@ -10,15 +10,14 @@ import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Demo from './screens/Demo';
 import Anonymous from './screens/Anonymous';
+import Feed from './screens/Feed';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
 
-  const [isLoading, setIsLoading] = useState(true); 
-  const [user, setUser] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
-
-  
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -37,7 +36,6 @@ const App = () => {
       </View>
     );
   }
-    
 
   return (
     <NavigationContainer>
@@ -48,7 +46,7 @@ const App = () => {
           headerTitle: () => (
             <Image
               source={require('./assets/XWhite.png')}
-              style={{ width: 45, height: 45 }}
+              style={{ width:35, height:35 }}
               resizeMode="contain"
             />
           ),
@@ -64,7 +62,7 @@ const App = () => {
           headerTitle: () => (
             <Image
               source={require('./assets/XWhite.png')}
-              style={{ width: 45, height: 45 }}
+              style={{ width:35, height:35 }}
               resizeMode="contain"
             />
           ),
@@ -75,8 +73,50 @@ const App = () => {
 
         }} />
 
-        <Stack.Screen name="Demo" component={Demo} options={{ headerShown: false }} />
-        <Stack.Screen name="Anonymous" component={Anonymous} options={{ headerShown: false }} />
+        <Stack.Screen name="Demo" component={Demo} options={{
+          headerTitle: () => (
+            <Image
+              source={require('./assets/XWhite.png')}
+              style={{ width:35, height:35 }}
+              resizeMode="contain"
+            />
+          ),
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: 'black'
+          },
+          headerTintColor: 'white'
+        }} />
+
+        <Stack.Screen name="Anonymous" component={Anonymous} options={{
+          headerTitle: () => (
+            <Image
+              source={require('./assets/XWhite.png')}
+              style={{ width:35, height:35 }}
+              resizeMode="contain"
+            />
+          ),
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: 'black'
+          },
+          headerTintColor: 'white'
+        }} />
+
+        <Stack.Screen name="Feed" component={Feed} options={{
+          headerTitle: () => (
+            <Image
+              source={require('./assets/XWhite.png')}
+              style={{ width:35, height: 35}}
+              resizeMode="contain"
+            />
+          ),
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: 'black'
+          },
+          headerTintColor: 'white'
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

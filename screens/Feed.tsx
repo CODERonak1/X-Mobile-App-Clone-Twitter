@@ -1,0 +1,36 @@
+import { StyleSheet, Text, View, } from 'react-native';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+
+const Feed = () => {
+    return (
+        <SafeAreaView style={styles.background}>
+            <View style={styles.container}>
+                <Text style={styles.text}>Feed</Text>
+            </View>
+        </SafeAreaView>
+    )
+}
+
+export default Feed;
+
+const styles = StyleSheet.create({
+
+    background: {
+        backgroundColor: 'black',
+        height: '100%',
+    },
+
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    text: {
+        color: 'white',
+        fontSize: 30,
+        fontWeight: 'bold',
+    }
+})

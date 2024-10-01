@@ -8,16 +8,16 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 const Signup = () => {
     const navigation = useNavigation();
 
-    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isFocusedInput, setIsFocusedInput] = useState('')
 
     const handleSignin = async () => {
         try {
-            await signInWithEmailAndPassword(auth, name, password);
+            await signInWithEmailAndPassword(auth, email, password);
             console.log('Sign in successful');
 
-            navigation.navigate('Demo');
+            navigation.navigate('Feed');
         } catch (error) {
 
             if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
@@ -38,8 +38,8 @@ const Signup = () => {
                 <TextInput
                     style={[styles.input, isFocusedInput === 'name' && styles.focusInput]}
                     placeholder="Email"
-                    value={name}
-                    onChangeText={newLogin => setName(newLogin)}
+                    value={email}
+                    onChangeText={login => setEmail(login)}
                     placeholderTextColor="gray"
                     keyboardType="email-address"
                     cursorColor={'#3493d6'}
