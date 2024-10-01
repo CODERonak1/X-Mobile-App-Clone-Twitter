@@ -14,6 +14,7 @@ import Feed from './screens/Feed';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
+  
 
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
