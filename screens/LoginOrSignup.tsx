@@ -34,7 +34,7 @@ const LoginOrSignup = () => {
 
                 <Text style={styles.or}>or</Text>
 
-                <Pressable onPress={() => navigation.navigate('Login')} style={styles.button} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                <Pressable onPress={() => navigation.navigate('Anonymous')} style={styles.button} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
                     <Text style={styles.btnText}>Be Anonymous</Text>
                 </Pressable>
 

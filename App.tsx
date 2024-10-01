@@ -9,6 +9,7 @@ import LoginOrSignup from './screens/LoginOrSignup';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Demo from './screens/Demo';
+import Anonymous from './screens/Anonymous';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -75,6 +76,7 @@ const App = () => {
         }} />
 
         <Stack.Screen name="Demo" component={Demo} options={{ headerShown: false }} />
+        <Stack.Screen name="Anonymous" component={Anonymous} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
