@@ -3,9 +3,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
-import Demo from '../screens/Demo';
-
-const Feed = () => {
+const Notifications = () => {
     return (
         <SafeAreaView style={styles.background}>
 
@@ -17,13 +15,13 @@ const Feed = () => {
             />
 
             <View style={styles.container}>
-                <Text style={styles.text}>Feed</Text>
+                <Text style={styles.text}>Notifications</Text>
             </View>
         </SafeAreaView>
     )
 }   
 
-export default Feed;
+export default Notifications;
 
 const styles = StyleSheet.create({
 

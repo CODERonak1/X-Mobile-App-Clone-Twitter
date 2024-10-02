@@ -17,7 +17,7 @@ const Signup = () => {
             await signInWithEmailAndPassword(auth, email, password);
             console.log('Sign in successful');
 
-            navigation.navigate('Feed');
+            navigation.navigate('Main');
         } catch (error) {
 
             if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {

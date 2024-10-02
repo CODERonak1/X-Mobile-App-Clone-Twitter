@@ -1,8 +1,14 @@
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native'; // Added Image import
+import { StyleSheet, Text, View, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react'; // Import useEffect and useState
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { auth } from './firebaseConfig';
+
+// icons
+import Entypo from '@expo/vector-icons/Entypo';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 // screens
 import LoginOrSignup from './screens/LoginOrSignup';
@@ -11,11 +17,58 @@ import Signup from './screens/Signup';
 import Demo from './screens/Demo';
 import Anonymous from './screens/Anonymous';
 import Feed from './screens/Feed';
+import Messages from './screens/Messages';
+import Notifications from './screens/Notifications';
+import Search from './screens/Search';
+
 
 const Stack = createNativeStackNavigator();
-const App = () => {
-  
+const Tab = createBottomTabNavigator();
 
+const MainTabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={() => ({
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: { backgroundColor: 'black', borderTopWidth: 0 },
+        headerShown: false, 
+      })}
+    >
+
+      <Tab.Screen name="Feed" component={Feed} options={{
+        tabBarLabel: '',
+        tabBarIcon: ({ color, size }) => {
+          return <Entypo name="home" size={size} color={color} />;
+        },
+      }} />
+      <Tab.Screen name="Search" component={Search} options={{
+        tabBarLabel: '',
+        tabBarIcon: ({ color, size }) => {
+          return <Ionicons name="search" size={size} color={color} />
+        },
+      }} />
+
+      <Tab.Screen name="Notifications" component={Notifications} options={{
+        tabBarLabel: '',
+        tabBarIcon: ({ color, size }) => {
+          return <Ionicons name="notifications" size={size} color={color} />
+        },
+      }} />
+
+      <Tab.Screen name="Messages" component={Messages} options={{
+        tabBarLabel: '',
+        tabBarIcon: ({ color, size }) => {
+          return <FontAwesome name="envelope-o" size={size} color={color} />
+        },
+      }} />
+
+      
+    </Tab.Navigator>
+  );
+};
+
+const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
@@ -42,28 +95,30 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LoginOrSignup">
         <Stack.Screen name="LoginOrSignup" component={LoginOrSignup} options={{ headerShown: false }} />
-
-        <Stack.Screen name="Login" component={Login} options={{
-          headerTitle: () => (
-            <Image
-              source={require('./assets/XWhite.png')}
-              style={{ width:35, height:35 }}
-              resizeMode="contain"
-            />
-          ),
-          headerTitleAlign: 'center',
-          headerStyle: {
-            backgroundColor: 'black'
-          },
-          headerTintColor: 'white'
-        }} />
-
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerTitle: () => (
+              <Image
+                source={require('./assets/XWhite.png')}
+                style={{ width: 35, height: 35 }}
+                resizeMode="contain"
+              />
+            ),
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: 'black'
+            },
+            headerTintColor: 'white'
+          }}
+        />
         <Stack.Screen name="Signup" component={Signup} options={{
           headerTitleAlign: 'center',
           headerTitle: () => (
             <Image
               source={require('./assets/XWhite.png')}
-              style={{ width:35, height:35 }}
+              style={{ width: 35, height: 35 }}
               resizeMode="contain"
             />
           ),
@@ -71,14 +126,12 @@ const App = () => {
             backgroundColor: 'black'
           },
           headerTintColor: 'white'
-
         }} />
-
         <Stack.Screen name="Demo" component={Demo} options={{
           headerTitle: () => (
             <Image
               source={require('./assets/XWhite.png')}
-              style={{ width:35, height:35 }}
+              style={{ width: 35, height: 35 }}
               resizeMode="contain"
             />
           ),
@@ -88,12 +141,11 @@ const App = () => {
           },
           headerTintColor: 'white'
         }} />
-
         <Stack.Screen name="Anonymous" component={Anonymous} options={{
           headerTitle: () => (
             <Image
               source={require('./assets/XWhite.png')}
-              style={{ width:35, height:35 }}
+              style={{ width: 35, height: 35 }}
               resizeMode="contain"
             />
           ),
@@ -104,11 +156,12 @@ const App = () => {
           headerTintColor: 'white'
         }} />
 
-        <Stack.Screen name="Feed" component={Feed} options={{headerShown: false}} />
+        {/* Adding MainTabs to the navigation stack */}
+        <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default App;
 
