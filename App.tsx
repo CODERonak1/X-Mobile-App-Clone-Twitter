@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { auth } from './firebaseConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // icons
 import Entypo from '@expo/vector-icons/Entypo';
@@ -83,16 +84,24 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const checkUser = async () => {
+      const storedUser = await AsyncStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    };
+  
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
-      console.log("Auth state changed: ", user);
-      // setIsLoading(false);
     });
-
+  
+    checkUser(); // Async call to retrieve stored user.
+  
     return () => {
       unsubscribe();
     };
   }, []);
+  
 
   // if (isLoading) {
   //   return (

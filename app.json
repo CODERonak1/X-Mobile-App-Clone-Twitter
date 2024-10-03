@@ -7,9 +7,9 @@
     "icon": "./assets/XLogo2.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/XWhite.png",
+      "image": "./assets/XLogo2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0c141b"
+      "backgroundColor": "black"
     },
     "ios": {
       "supportsTablet": true

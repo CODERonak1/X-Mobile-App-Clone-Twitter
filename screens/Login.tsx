@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
     const navigation = useNavigation();
@@ -15,25 +16,26 @@ const Login = () => {
 
     const handleSignin = async () => {
         setIsLoading(true);
-        setErrorMessage(''); // Reset error message before sign-in attempt
+        setErrorMessage('');
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
             console.log('Sign in successful');
+            await AsyncStorage.setItem('user', JSON.stringify(user));
             navigation.navigate('Main');
         } catch (error) {
-            setIsLoading(false); // Hide loading indicator
+            setIsLoading(false);
 
-            // Set the appropriate error message based on the error code
             if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                setErrorMessage('The email or password you entered is incorrect.'); // Unified error message for incorrect credentials
-             } else {
-                setErrorMessage('An unexpected error occurred. Please try again.'); // Generic error message for unexpected errors
+                setErrorMessage('The email or password you entered is incorrect.');
+            } else {
+                setErrorMessage('An unexpected error occurred. Please try again.');
             }
             console.log('Sign in Error:', error);
+        } finally {
+            setIsLoading(false); // Ensure loading is stopped
         }
-
-        setIsLoading(false); // Hide loading indicator after operation
     };
 
     return (
@@ -68,23 +70,20 @@ const Login = () => {
                             onFocus={() => setIsFocusedInput('password')}
                             onBlur={() => setIsFocusedInput('')}
                         />
-                        {/* Display error message if there's an error */}
                         {errorMessage ? (
                             <Text style={styles.errorText}>{errorMessage}</Text>
                         ) : null}
                     </View>
                     <View style={styles.btn}>
-                        <Pressable 
-                            onPress={() => navigation.navigate('Login')} 
-                            style={styles.forgotPassBtn} 
-                            android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                        <Pressable
+                            onPress={() => navigation.navigate('Login')}
+                            style={styles.forgotPassBtn}>
                             <Text style={styles.forgotPassText}>Forgot password?</Text>
                         </Pressable>
-                        <Pressable 
-                            onPress={handleSignin} 
-                            style={styles.loginBtn} 
-                            android_ripple={{ color: '#fffff', borderless: false, foreground: true }}>
-                            <Text style={styles.loginText}>Login</Text>
+                        <Pressable
+                            onPress={handleSignin}
+                            style={styles.loginBtn}>
+                            <Text style={styles.loginBtnText}>Log in</Text>
                         </Pressable>
                     </View>
                 </>
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
         padding: 5,
         marginBottom: 10,
     },
-    loginText: {
+    loginBtnText: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 18,
