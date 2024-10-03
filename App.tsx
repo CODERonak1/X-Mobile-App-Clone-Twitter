@@ -28,21 +28,21 @@ const Tab = createBottomTabNavigator();
 const MainTabs = () => {
   return (
     <Tab.Navigator
-      screenOptions={() => ({
+      screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: { backgroundColor: 'black', borderTopWidth: 0 },
         headerShown: false,
-      })}
+      }}
     >
       <Tab.Screen
         name="Feed"
         component={Feed}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({ color, size }) => {
-            return <Entypo name="home" size={size} color={color} />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Entypo name="home" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -50,9 +50,9 @@ const MainTabs = () => {
         component={Search}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({ color, size }) => {
-            return <Ionicons name="search" size={size} color={color} />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="search" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -60,9 +60,9 @@ const MainTabs = () => {
         component={Notifications}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({ color, size }) => {
-            return <Ionicons name="notifications" size={size} color={color} />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="notifications" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -70,9 +70,9 @@ const MainTabs = () => {
         component={Messages}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({ color, size }) => {
-            return <FontAwesome name="envelope-o" size={size} color={color} />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="envelope-o" size={size} color={color} />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -80,36 +80,23 @@ const MainTabs = () => {
 };
 
 const App = () => {
-  // const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const checkUser = async () => {
-      const storedUser = await AsyncStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    };
-  
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+      if (user) {
+        setUser(user);
+        AsyncStorage.setItem('user', JSON.stringify(user));
+      } else {
+        setUser(null);
+        AsyncStorage.removeItem('user');
+      }
     });
-  
-    checkUser(); // Async call to retrieve stored user.
-  
+
     return () => {
       unsubscribe();
     };
   }, []);
-  
-
-  // if (isLoading) {
-  //   return (
-  //     <View style={styles.loadingContainer}>
-  //       <Text style={styles.loadingText}>Loading...</Text>
-  //     </View>
-  //   );
-  // }
 
   return (
     <NavigationContainer>
@@ -203,15 +190,4 @@ const App = () => {
 
 export default App;
 
-const styles = StyleSheet.create({
-  // loadingContainer: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: 'black',
-  // },
-  // loadingText: {
-  //   color: 'white',
-  //   fontSize: 20,
-  // },
-});
+const styles = StyleSheet.create({});

@@ -22,20 +22,22 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             console.log('Sign in successful');
-            await AsyncStorage.setItem('user', JSON.stringify(user));
-            navigation.navigate('Main');
+            await AsyncStorage.setItem('user', JSON.stringify(user)); // Store user data
+            navigation.navigate('Main'); // Navigate to Main tabs
         } catch (error) {
-            setIsLoading(false);
-
-            if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                setErrorMessage('The email or password you entered is incorrect.');
-            } else {
-                setErrorMessage('An unexpected error occurred. Please try again.');
-            }
-            console.log('Sign in Error:', error);
+            handleLoginError(error); // Handle error
         } finally {
             setIsLoading(false); // Ensure loading is stopped
         }
+    };
+
+    const handleLoginError = (error) => {
+        if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+            setErrorMessage('The email or password you entered is incorrect.');
+        } else {
+            setErrorMessage('An unexpected error occurred. Please try again.');
+        }
+        console.log('Sign in Error:', error);
     };
 
     return (
@@ -49,14 +51,14 @@ const Login = () => {
                     <Text style={styles.text}>To Login, first enter your email and password.</Text>
                     <View style={styles.container}>
                         <TextInput
-                            style={[styles.input, isFocusedInput === 'name' && styles.focusInput]}
+                            style={[styles.input, isFocusedInput === 'email' && styles.focusInput]}
                             placeholder="Email"
                             value={email}
                             onChangeText={setEmail}
                             placeholderTextColor="gray"
                             keyboardType="email-address"
                             cursorColor={'#3493d6'}
-                            onFocus={() => setIsFocusedInput('name')}
+                            onFocus={() => setIsFocusedInput('email')}
                             onBlur={() => setIsFocusedInput('')}
                         />
                         <TextInput
@@ -70,20 +72,9 @@ const Login = () => {
                             onFocus={() => setIsFocusedInput('password')}
                             onBlur={() => setIsFocusedInput('')}
                         />
-                        {errorMessage ? (
-                            <Text style={styles.errorText}>{errorMessage}</Text>
-                        ) : null}
-                    </View>
-                    <View style={styles.btn}>
-                        <Pressable
-                            onPress={() => navigation.navigate('Login')}
-                            style={styles.forgotPassBtn}>
-                            <Text style={styles.forgotPassText}>Forgot password?</Text>
-                        </Pressable>
-                        <Pressable
-                            onPress={handleSignin}
-                            style={styles.loginBtn}>
-                            <Text style={styles.loginBtnText}>Log in</Text>
+                        <Text style={styles.errorText}>{errorMessage}</Text>
+                        <Pressable style={styles.loginBtn} onPress={handleSignin}>
+                            <Text style={styles.loginBtnText}>Log In</Text>
                         </Pressable>
                     </View>
                 </>
