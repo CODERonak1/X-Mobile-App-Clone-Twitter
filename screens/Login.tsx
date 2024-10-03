@@ -7,19 +7,19 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Signup = () => {
     const navigation = useNavigation();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isFocusedInput, setIsFocusedInput] = useState('')
+    const [isFocusedInput, setIsFocusedInput] = useState('');
+    const [isLoading, setIsLoading] = useState(false); // Set to false by default
 
     const handleSignin = async () => {
+        setIsLoading(true); // Set loading to true when sign-in starts
         try {
             await signInWithEmailAndPassword(auth, email, password);
             console.log('Sign in successful');
-
-            navigation.navigate('Main');
+            navigation.navigate('Main'); // Navigate after successful sign-in
         } catch (error) {
-
+            setIsLoading(false); // Set loading to false in case of error
             if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
                 Alert.alert('Login Error', 'Invalid email or password. Please try again.', [{ text: 'OK' }]);
             } else {
@@ -27,78 +27,75 @@ const Signup = () => {
             }
             console.log('Sign in Error:', error);
         }
-    }
+        setIsLoading(false); 
+    };
 
     return (
         <SafeAreaView style={styles.background}>
-
-            <Text style={styles.text}>To get started, first enter your email and password. </Text>
-
-            <View style={styles.container}>
-                <TextInput
-                    style={[styles.input, isFocusedInput === 'name' && styles.focusInput]}
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={login => setEmail(login)}
-                    placeholderTextColor="gray"
-                    keyboardType="email-address"
-                    cursorColor={'#3493d6'}
-                    onFocus={() => setIsFocusedInput('name')}
-                    onBlur={() => setIsFocusedInput('')}
-                />
-
-                <TextInput
-                    style={[styles.input, isFocusedInput === 'password' && styles.focusInput]}
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={setPassword}
-                    placeholderTextColor="gray"
-                    cursorColor={'#3493d6'}
-                    secureTextEntry={true}
-                    onFocus={() => setIsFocusedInput('password')}
-                    onBlur={() => setIsFocusedInput('')}
-                />
-
-            </View>
-
-            <View style={styles.btn}>
-                <Pressable onPress={() => navigation.navigate('Login')} style={styles.forgotPassBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
-                    <Text style={styles.forgotPassText}>Forgot password?</Text>
-                </Pressable>
-
-                <Pressable onPress={handleSignin} style={styles.loginBtn} android_ripple={{ color: '#fffff', borderless: false, foreground: true }}>
-                    <Text style={styles.loginText}>Login</Text>
-                </Pressable>
-            </View>
+            {isLoading ? ( // Show loading spinner if loading
+                <View style={styles.loadingContainer}>
+                    <Text style={styles.loadingText}>Loading...</Text>
+                </View>
+            ) : (
+                <>
+                    <Text style={styles.text}>To get started, first enter your email and password.</Text>
+                    <View style={styles.container}>
+                        <TextInput
+                            style={[styles.input, isFocusedInput === 'name' && styles.focusInput]}
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                            placeholderTextColor="gray"
+                            keyboardType="email-address"
+                            cursorColor={'#3493d6'}
+                            onFocus={() => setIsFocusedInput('name')}
+                            onBlur={() => setIsFocusedInput('')}
+                        />
+                        <TextInput
+                            style={[styles.input, isFocusedInput === 'password' && styles.focusInput]}
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={setPassword}
+                            placeholderTextColor="gray"
+                            cursorColor={'#3493d6'}
+                            secureTextEntry={true}
+                            onFocus={() => setIsFocusedInput('password')}
+                            onBlur={() => setIsFocusedInput('')}
+                        />
+                    </View>
+                    <View style={styles.btn}>
+                        <Pressable onPress={() => navigation.navigate('Login')} style={styles.forgotPassBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                            <Text style={styles.forgotPassText}>Forgot password?</Text>
+                        </Pressable>
+                        <Pressable onPress={handleSignin} style={styles.loginBtn} android_ripple={{ color: '#fffff', borderless: false, foreground: true }}>
+                            <Text style={styles.loginText}>Login</Text>
+                        </Pressable>
+                    </View>
+                </>
+            )}
         </SafeAreaView>
-    )
-}
+    );
+};
 
 export default Signup;
 
 const styles = StyleSheet.create({
-
     background: {
         backgroundColor: 'black',
         height: '100%',
     },
-
     container: {
-        // flex: 1,
-        // justifyContent: 'center',
         alignItems: 'center',
         marginTop: 140,
         position: 'relative',
-        bottom: 100
+        bottom: 100,
     },
-
     text: {
         fontSize: 30,
         fontWeight: 'bold',
         color: 'white',
-        marginLeft: 20
+        marginLeft: 20,
     },
-
     input: {
         fontSize: 18,
         padding: 18,
@@ -109,14 +106,11 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         color: 'white',
         marginTop: 30,
-        
     },
-
     focusInput: {
         borderWidth: 2,
-        borderColor: '#3493d6'
+        borderColor: '#3493d6',
     },
-
     forgotPassBtn: {
         borderRadius: 50,
         width: '42%',
@@ -126,13 +120,11 @@ const styles = StyleSheet.create({
         margin: 'auto',
         marginBottom: 10,
     },
-
     forgotPassText: {
         color: 'white',
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
-
     loginBtn: {
         backgroundColor: 'white',
         borderRadius: 50,
@@ -141,15 +133,23 @@ const styles = StyleSheet.create({
         padding: 5,
         marginBottom: 10,
     },
-
     loginText: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 18,
     },
-
     btn: {
         flex: 1,
         flexDirection: 'row',
-    }
-})
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black',
+    },
+    loadingText: {
+        color: 'white',
+        fontSize: 20,
+    },
+});
