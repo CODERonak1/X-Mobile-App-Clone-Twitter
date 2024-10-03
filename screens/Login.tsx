@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const Signup = () => {
+const Login = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,13 +13,13 @@ const Signup = () => {
     const [isLoading, setIsLoading] = useState(false); // Set to false by default
 
     const handleSignin = async () => {
-        setIsLoading(true); // Set loading to true when sign-in starts
+        setIsLoading(true); // Show loading indicator
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(auth, email, password); // Attempt to sign in
             console.log('Sign in successful');
-            navigation.navigate('Main'); // Navigate after successful sign-in
+            navigation.navigate('Main'); // Navigate to Main after successful sign-in
         } catch (error) {
-            setIsLoading(false); // Set loading to false in case of error
+            setIsLoading(false); // Hide loading indicator on error
             if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
                 Alert.alert('Login Error', 'Invalid email or password. Please try again.', [{ text: 'OK' }]);
             } else {
@@ -27,8 +27,10 @@ const Signup = () => {
             }
             console.log('Sign in Error:', error);
         }
-        setIsLoading(false); 
+        setIsLoading(false); // Hide loading indicator after operation
     };
+    
+    
 
     return (
         <SafeAreaView style={styles.background}>
@@ -77,7 +79,7 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default Login;
 
 const styles = StyleSheet.create({
     background: {

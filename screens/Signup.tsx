@@ -9,17 +9,23 @@ const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isFocusedInput, setIsFocusedInput] = useState('');
+    const [errorMessage, setErrorMessage] = useState(''); // Add this line for error message
 
     const navigation = useNavigation();
 
     const handleSignup = async () => {
         try {
+            setErrorMessage(''); // Clear previous error messages
             await createUserWithEmailAndPassword(auth, email, password);
             console.log('Sign up successful');
-
             navigation.navigate('Demo');
         } catch (error) {
             console.error('Signup Error:', error);
+            if (error.code === 'auth/email-already-in-use') {
+                setErrorMessage('This email address is already in use, use other email address.'); 
+            } else {
+                setErrorMessage('Signup failed. Please try again.'); 
+            }
         }
     };
 
@@ -39,6 +45,10 @@ const Signup = () => {
                     onFocus={() => setIsFocusedInput('email')}
                     onBlur={() => setIsFocusedInput('')}
                 />
+                {/* Render error message here */}
+                {errorMessage ? (
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                ) : null}
 
                 <TextInput
                     style={[styles.input, isFocusedInput === 'password' && styles.focusInput]}
@@ -110,5 +120,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 18,
+    },
+    errorMessage: { // Add styling for error message
+        color: 'red',
+        marginTop: 5,
+        textAlign: 'center',
+        fontSize: 16,
     },
 });
