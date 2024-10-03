@@ -18,7 +18,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/XLogo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.xclone.clone"
     },
     "web": {
       "favicon": "./assets/favicon.png"
