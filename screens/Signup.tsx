@@ -9,22 +9,32 @@ const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isFocusedInput, setIsFocusedInput] = useState('');
-    const [errorMessage, setErrorMessage] = useState(''); // Add this line for error message
+    const [errorMessage, setErrorMessage] = useState(''); // Email error message
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState(''); // Password error message
 
     const navigation = useNavigation();
 
     const handleSignup = async () => {
+        // Clear previous error messages
+        setErrorMessage('');
+        setPasswordErrorMessage('');
+
+        // Check password length
+        if (password.length < 8) {
+            setPasswordErrorMessage('Password must be at least 8 characters long.'); // Set password error message
+            return; // Stop further execution
+        }
+
         try {
-            setErrorMessage(''); // Clear previous error messages
             await createUserWithEmailAndPassword(auth, email, password);
             console.log('Sign up successful');
             navigation.navigate('Demo');
         } catch (error) {
             console.error('Signup Error:', error);
             if (error.code === 'auth/email-already-in-use') {
-                setErrorMessage('This email address is already in use, use other email address.'); 
+                setErrorMessage('This email address is already in use.'); // Set custom error message
             } else {
-                setErrorMessage('Signup failed. Please try again.'); 
+                setErrorMessage('Signup failed. Please try again.'); // Generic error message
             }
         }
     };
@@ -45,7 +55,7 @@ const Signup = () => {
                     onFocus={() => setIsFocusedInput('email')}
                     onBlur={() => setIsFocusedInput('')}
                 />
-                {/* Render error message here */}
+                {/* Render email error message here */}
                 {errorMessage ? (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                 ) : null}
@@ -61,6 +71,10 @@ const Signup = () => {
                     onFocus={() => setIsFocusedInput('password')}
                     onBlur={() => setIsFocusedInput('')}
                 />
+                {/* Render password error message here */}
+                {passwordErrorMessage ? (
+                    <Text style={styles.errorMessage}>{passwordErrorMessage}</Text>
+                ) : null}
             </View>
 
             <View>
@@ -121,7 +135,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
     },
-    errorMessage: { // Add styling for error message
+    errorMessage: { // Styling for error messages
         color: 'red',
         marginTop: 5,
         textAlign: 'center',

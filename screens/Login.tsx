@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -10,37 +10,41 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isFocusedInput, setIsFocusedInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false); // Set to false by default
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSignin = async () => {
-        setIsLoading(true); // Show loading indicator
+        setIsLoading(true);
+        setErrorMessage(''); // Reset error message before sign-in attempt
+
         try {
-            await signInWithEmailAndPassword(auth, email, password); // Attempt to sign in
+            await signInWithEmailAndPassword(auth, email, password);
             console.log('Sign in successful');
-            navigation.navigate('Main'); // Navigate to Main after successful sign-in
+            navigation.navigate('Main');
         } catch (error) {
-            setIsLoading(false); // Hide loading indicator on error
+            setIsLoading(false); // Hide loading indicator
+
+            // Set the appropriate error message based on the error code
             if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                Alert.alert('Login Error', 'Invalid email or password. Please try again.', [{ text: 'OK' }]);
-            } else {
-                Alert.alert('Login Error', 'An unexpected error occurred. Please try again later.', [{ text: 'OK' }]);
+                setErrorMessage('The email or password you entered is incorrect.'); // Unified error message for incorrect credentials
+             } else {
+                setErrorMessage('An unexpected error occurred. Please try again.'); // Generic error message for unexpected errors
             }
             console.log('Sign in Error:', error);
         }
+
         setIsLoading(false); // Hide loading indicator after operation
     };
-    
-    
 
     return (
         <SafeAreaView style={styles.background}>
-            {isLoading ? ( // Show loading spinner if loading
+            {isLoading ? (
                 <View style={styles.loadingContainer}>
                     <Text style={styles.loadingText}>Loading...</Text>
                 </View>
             ) : (
                 <>
-                    <Text style={styles.text}>To get started, first enter your email and password.</Text>
+                    <Text style={styles.text}>To Login, first enter your email and password.</Text>
                     <View style={styles.container}>
                         <TextInput
                             style={[styles.input, isFocusedInput === 'name' && styles.focusInput]}
@@ -64,12 +68,22 @@ const Login = () => {
                             onFocus={() => setIsFocusedInput('password')}
                             onBlur={() => setIsFocusedInput('')}
                         />
+                        {/* Display error message if there's an error */}
+                        {errorMessage ? (
+                            <Text style={styles.errorText}>{errorMessage}</Text>
+                        ) : null}
                     </View>
                     <View style={styles.btn}>
-                        <Pressable onPress={() => navigation.navigate('Login')} style={styles.forgotPassBtn} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
+                        <Pressable 
+                            onPress={() => navigation.navigate('Login')} 
+                            style={styles.forgotPassBtn} 
+                            android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
                             <Text style={styles.forgotPassText}>Forgot password?</Text>
                         </Pressable>
-                        <Pressable onPress={handleSignin} style={styles.loginBtn} android_ripple={{ color: '#fffff', borderless: false, foreground: true }}>
+                        <Pressable 
+                            onPress={handleSignin} 
+                            style={styles.loginBtn} 
+                            android_ripple={{ color: '#fffff', borderless: false, foreground: true }}>
                             <Text style={styles.loginText}>Login</Text>
                         </Pressable>
                     </View>
@@ -112,6 +126,11 @@ const styles = StyleSheet.create({
     focusInput: {
         borderWidth: 2,
         borderColor: '#3493d6',
+    },
+    errorText: {
+        color: 'red',
+        marginTop: 10,
+        textAlign: 'center',
     },
     forgotPassBtn: {
         borderRadius: 50,
