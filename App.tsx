@@ -21,6 +21,7 @@ import Feed from './screens/Feed';
 import Messages from './screens/Messages';
 import Notifications from './screens/Notifications';
 import Search from './screens/Search';
+import Username from './screens/Username';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -181,6 +182,12 @@ const App = () => {
         <Stack.Screen
           name="Main"
           component={MainTabs}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Username"
+          component={Username}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

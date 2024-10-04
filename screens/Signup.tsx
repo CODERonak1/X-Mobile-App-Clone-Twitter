@@ -28,7 +28,7 @@ const Signup = () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             console.log('Sign up successful');
-            navigation.navigate('Demo');
+            navigation.navigate('Username');
         } catch (error) {
             console.error('Signup Error:', error);
             if (error.code === 'auth/email-already-in-use') {
