@@ -5,22 +5,24 @@ import { useState } from 'react';
 import { auth, db } from '../firebaseConfig';  // Import Firestore and Auth
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';  // Firestore methods
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');  // Add username state
     const [isFocusedInput, setIsFocusedInput] = useState('');
     const [errorMessage, setErrorMessage] = useState('');  // Email error message
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');  // Password error message
 
     const navigation = useNavigation();
 
+    // Inside handleSignup function in signup.tsx
     const handleSignup = async () => {
         // Clear previous error messages
         setErrorMessage('');
         setPasswordErrorMessage('');
 
-        // Check password length
         if (password.length < 8) {
             setPasswordErrorMessage('Password must be at least 8 characters long.');
             return;  // Stop further execution
@@ -31,16 +33,20 @@ const Signup = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // After successful signup, add user info to Firestore with 'uid' as the document ID
-            await setDoc(doc(db, 'users', user.uid), {
-                uid: user.uid,  // User's unique ID
-                email: email,  // Store email
-                password: password,  // Store password (not recommended to store raw password)
-                createdAt: serverTimestamp(),  // Timestamp
-            });
+            // Add user info to Firestore with 'uid' as the document ID
+            const userData = {
+                uid: user.uid,  
+                email: email,  
+                username: username,  // Include username in the userData
+                createdAt: serverTimestamp(),  
+            };
+            await setDoc(doc(db, 'users', user.uid), userData);
+
+            // Store user data in AsyncStorage
+            await AsyncStorage.setItem('user', JSON.stringify(userData));
 
             console.log('Sign up successful and user added to Firestore');
-            navigation.navigate('Username');  // Navigate to Username screen after success
+            navigation.navigate('Main');  // Navigate to main screen
         } catch (error) {
             console.error('Signup Error:', error);
             if (error.code === 'auth/email-already-in-use') {
@@ -56,6 +62,18 @@ const Signup = () => {
             <Text style={styles.text}>Create your account</Text>
 
             <View style={styles.container}>
+                {/* Username input field */}
+                <TextInput
+                    style={[styles.input, isFocusedInput === 'username' && styles.focusInput]}
+                    placeholder="Username"
+                    value={username}
+                    onChangeText={setUsername}  // Capture username input
+                    placeholderTextColor="gray"
+                    cursorColor={'#3493d6'}
+                    onFocus={() => setIsFocusedInput('username')}
+                    onBlur={() => setIsFocusedInput('')}
+                />
+
                 <TextInput
                     style={[styles.input, isFocusedInput === 'email' && styles.focusInput]}
                     placeholder="Email address"

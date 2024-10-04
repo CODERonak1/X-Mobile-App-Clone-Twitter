@@ -5,6 +5,9 @@ import { useState } from 'react';
 import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDoc } from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
 const Login = () => {
     const navigation = useNavigation();
@@ -14,22 +17,30 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleSignin = async () => {
-        setIsLoading(true);
-        setErrorMessage('');
+const handleSignin = async () => {
+    setIsLoading(true);
+    setErrorMessage('');
 
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            console.log('Sign in successful');
-            await AsyncStorage.setItem('user', JSON.stringify(user)); // Store user data
-            navigation.navigate('Main'); // Navigate to Main tabs
-        } catch (error) {
-            handleLoginError(error); // Handle error
-        } finally {
-            setIsLoading(false); // Ensure loading is stopped
-        }
-    };
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Fetch user data from Firestore
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const userData = userDoc.data();
+
+        // Store user data (email and username) in AsyncStorage
+        await AsyncStorage.setItem('user', JSON.stringify(userData));
+
+        console.log('Sign in successful');
+        navigation.navigate('Main'); // Navigate to Main tabs
+    } catch (error) {
+        handleLoginError(error); // Handle error
+    } finally {
+        setIsLoading(false); // Ensure loading is stopped
+    }
+};
+
 
     const handleLoginError = (error) => {
         if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
