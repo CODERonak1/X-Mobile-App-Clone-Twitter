@@ -1,16 +1,17 @@
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { auth } from '../firebaseConfig';
+import { auth, db } from '../firebaseConfig';  // Import Firestore and Auth
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';  // Firestore methods
 
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isFocusedInput, setIsFocusedInput] = useState('');
-    const [errorMessage, setErrorMessage] = useState(''); // Email error message
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState(''); // Password error message
+    const [errorMessage, setErrorMessage] = useState('');  // Email error message
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');  // Password error message
 
     const navigation = useNavigation();
 
@@ -21,20 +22,31 @@ const Signup = () => {
 
         // Check password length
         if (password.length < 8) {
-            setPasswordErrorMessage('Password must be at least 8 characters long.'); // Set password error message
-            return; // Stop further execution
+            setPasswordErrorMessage('Password must be at least 8 characters long.');
+            return;  // Stop further execution
         }
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            console.log('Sign up successful');
-            navigation.navigate('Username');
+            // Sign up the user with Firebase Authentication
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // After successful signup, add user info to Firestore with 'uid' as the document ID
+            await setDoc(doc(db, 'users', user.uid), {
+                uid: user.uid,  // User's unique ID
+                email: email,  // Store email
+                password: password,  // Store password (not recommended to store raw password)
+                createdAt: serverTimestamp(),  // Timestamp
+            });
+
+            console.log('Sign up successful and user added to Firestore');
+            navigation.navigate('Username');  // Navigate to Username screen after success
         } catch (error) {
             console.error('Signup Error:', error);
             if (error.code === 'auth/email-already-in-use') {
-                setErrorMessage('This email address is already in use.'); // Set custom error message
+                setErrorMessage('This email address is already in use.');
             } else {
-                setErrorMessage('Signup failed. Please try again.'); // Generic error message
+                setErrorMessage('Signup failed. Please try again.');
             }
         }
     };
@@ -55,7 +67,6 @@ const Signup = () => {
                     onFocus={() => setIsFocusedInput('email')}
                     onBlur={() => setIsFocusedInput('')}
                 />
-                {/* Render email error message here */}
                 {errorMessage ? (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                 ) : null}
@@ -71,7 +82,6 @@ const Signup = () => {
                     onFocus={() => setIsFocusedInput('password')}
                     onBlur={() => setIsFocusedInput('')}
                 />
-                {/* Render password error message here */}
                 {passwordErrorMessage ? (
                     <Text style={styles.errorMessage}>{passwordErrorMessage}</Text>
                 ) : null}
@@ -135,7 +145,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
     },
-    errorMessage: { // Styling for error messages
+    errorMessage: {
         color: 'red',
         marginTop: 5,
         textAlign: 'center',
