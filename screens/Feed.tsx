@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProfileImg from '../components/ProfileImg';
 
 const Feed = () => {
     const [user, setUser] = useState({ email: '', username: '' });
@@ -20,10 +21,15 @@ const Feed = () => {
 
     return (
         <SafeAreaView style={styles.background}>
+
+            <View style={styles.img}>
+            <ProfileImg />
+
             <Image
                 style={styles.xLogo}
                 source={require('../assets/XWhite.png')}
             />
+            </View>
 
             <View style={styles.container}>
                 <Text style={styles.text}>Feed</Text>
@@ -61,5 +67,12 @@ const styles = StyleSheet.create({
         width: 35,
         margin: 'auto',
         marginTop: 10
+    },
+
+    img: {
+        flexDirection: 'row',
+        // borderWidth: 2,
+        // borderColor: 'white',
+        width: '55%'
     },
 });
