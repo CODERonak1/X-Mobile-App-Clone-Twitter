@@ -1,15 +1,17 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import React from 'react';
 
 
 const ProfileImg = () => {
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assets/profileImg.jpg')}
-        style={styles.profileImg}
-        resizeMode="contain"
-      />
+      <Pressable>
+        <Image
+          source={require('../assets/profileImg.jpg')}
+          style={styles.profileImg}
+          resizeMode="contain"
+        />
+      </Pressable>
     </View>
   )
 }
@@ -30,4 +32,4 @@ const styles = StyleSheet.create({
     marginLeft: 15
   }
 
-  });
+});
