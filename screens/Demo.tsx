@@ -15,6 +15,7 @@ const Demo = () => {
             console.log('User signed out successfully');
             // Redirect to Sign In screen or Landing page
             navigation.navigate('LoginOrSignup');
+            
         } catch (error) {
             console.error('Logout Error:', error);
         }

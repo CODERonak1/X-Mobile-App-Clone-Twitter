@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileImg from '../components/ProfileImg';
+import { auth } from '../firebaseConfig'; // Ensure you import your Firebase configuration
+import { signOut } from 'firebase/auth';
 
-const Feed = () => {
+const Feed = ({ navigation }) => { 
     const [user, setUser] = useState({ email: '', username: '' });
 
     // Fetch user data from AsyncStorage
@@ -19,22 +21,35 @@ const Feed = () => {
         fetchUserData();
     }, []);
 
+    // Logout function
+    const handleLogout = async () => {
+        try {
+            await auth.signOut(); // Sign out from Firebase
+            await AsyncStorage.removeItem('user'); // Clear user data from AsyncStorage
+            navigation.navigate('LoginOrSignup'); // Navigate back to the login/signup screen
+            console.log('User signed out successfully');
+        } catch (error) {
+            console.error("Error signing out: ", error); // Handle any errors
+        }
+    };
+
     return (
         <SafeAreaView style={styles.background}>
-
             <View style={styles.img}>
-            <ProfileImg />
-
-            <Image
-                style={styles.xLogo}
-                source={require('../assets/XWhite.png')}
-            />
+                <ProfileImg />
+                <Image
+                    style={styles.xLogo}
+                    source={require('../assets/XWhite.png')}
+                />
             </View>
 
             <View style={styles.container}>
                 <Text style={styles.text}>Feed</Text>
                 <Text style={styles.userInfo}>Username: {user.username}</Text>
                 <Text style={styles.userInfo}>Email: {user.email}</Text>
+                <Button title="Logout" 
+                onPress={handleLogout} 
+                color="blue" />
             </View>
         </SafeAreaView>
     );
@@ -66,13 +81,10 @@ const styles = StyleSheet.create({
         height: 35,
         width: 35,
         margin: 'auto',
-        marginTop: 10
+        marginTop: 10,
     },
-
     img: {
         flexDirection: 'row',
-        // borderWidth: 2,
-        // borderColor: 'white',
-        width: '55%'
+        width: '55%',
     },
 });

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native'; // Import ActivityIndicator
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -81,6 +81,7 @@ const MainTabs = () => {
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -91,6 +92,7 @@ const App = () => {
         setUser(null);
         AsyncStorage.removeItem('user');
       }
+      setLoading(false); // Set loading to false once authentication state is determined
     });
 
     return () => {
@@ -98,91 +100,106 @@ const App = () => {
     };
   }, []);
 
+  if (loading) { // Show loading indicator while determining auth state
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="white" /> 
+      </View>
+    );
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={user ? "Main" : "LoginOrSignup"}>
-        <Stack.Screen
-          name="LoginOrSignup"
-          component={LoginOrSignup}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{
-            headerTitle: () => (
-              <Image
-                source={require('./assets/XWhite.png')}
-                style={{ width: 35, height: 35 }}
-                resizeMode="contain"
-              />
-            ),
-            headerTitleAlign: 'center',
-            headerStyle: {
-              backgroundColor: 'black',
-            },
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={Signup}
-          options={{
-            headerTitleAlign: 'center',
-            headerTitle: () => (
-              <Image
-                source={require('./assets/XWhite.png')}
-                style={{ width: 35, height: 35 }}
-                resizeMode="contain"
-              />
-            ),
-            headerStyle: {
-              backgroundColor: 'black',
-            },
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="Demo"
-          component={Demo}
-          options={{
-            headerTitle: () => (
-              <Image
-                source={require('./assets/XWhite.png')}
-                style={{ width: 35, height: 35 }}
-                resizeMode="contain"
-              />
-            ),
-            headerTitleAlign: 'center',
-            headerStyle: {
-              backgroundColor: 'black',
-            },
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="Anonymous"
-          component={Anonymous}
-          options={{
-            headerTitle: () => (
-              <Image
-                source={require('./assets/XWhite.png')}
-                style={{ width: 35, height: 35 }}
-                resizeMode="contain"
-              />
-            ),
-            headerTitleAlign: 'center',
-            headerStyle: {
-              backgroundColor: 'black',
-            },
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="Main"
-          component={MainTabs}
-          options={{ headerShown: false }}
-        />
+        {user ? (
+          <>
+            <Stack.Screen
+              name="Main"
+              component={MainTabs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Demo"
+              component={Demo}
+              options={{
+                headerTitle: () => (
+                  <Image
+                    source={require('./assets/XWhite.png')}
+                    style={{ width: 35, height: 35 }}
+                    resizeMode="contain"
+                  />
+                ),
+                headerTitleAlign: 'center',
+                headerStyle: {
+                  backgroundColor: 'black',
+                },
+                headerTintColor: 'white',
+              }}
+            />
+            <Stack.Screen
+              name="Anonymous"
+              component={Anonymous}
+              options={{
+                headerTitle: () => (
+                  <Image
+                    source={require('./assets/XWhite.png')}
+                    style={{ width: 35, height: 35 }}
+                    resizeMode="contain"
+                  />
+                ),
+                headerTitleAlign: 'center',
+                headerStyle: {
+                  backgroundColor: 'black',
+                },
+                headerTintColor: 'white',
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="LoginOrSignup"
+              component={LoginOrSignup}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{
+                headerTitle: () => (
+                  <Image
+                    source={require('./assets/XWhite.png')}
+                    style={{ width: 35, height: 35 }}
+                    resizeMode="contain"
+                  />
+                ),
+                headerTitleAlign: 'center',
+                headerStyle: {
+                  backgroundColor: 'black',
+                },
+                headerTintColor: 'white',
+              }}
+            />
+            <Stack.Screen
+              name="Signup"
+              component={Signup}
+              options={{
+                headerTitleAlign: 'center',
+                headerTitle: () => (
+                  <Image
+                    source={require('./assets/XWhite.png')}
+                    style={{ width: 35, height: 35 }}
+                    resizeMode="contain"
+                  />
+                ),
+                headerStyle: {
+                  backgroundColor: 'black',
+                },
+                headerTintColor: 'white',
+              }}
+            />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -190,4 +207,11 @@ const App = () => {
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black', // Optional: set background color
+  },
+});
