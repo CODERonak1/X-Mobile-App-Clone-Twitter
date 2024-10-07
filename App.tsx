@@ -94,7 +94,7 @@ const App = () => {
         setUser(null);
         AsyncStorage.removeItem('user');
       }
-      setLoading(false); // Set loading to false once authentication state is determined
+      setLoading(false); 
     });
 
     return () => {
@@ -102,7 +102,7 @@ const App = () => {
     };
   }, []);
 
-  if (loading) { // Show loading indicator while determining auth state
+  if (loading) { 
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="white" />
@@ -120,6 +120,26 @@ const App = () => {
               component={MainTabs}
               options={{ headerShown: false }}
             />
+
+<Stack.Screen
+              name="Profile"
+              component={Profile}
+              options={{
+                headerTitleAlign: 'center',
+                headerTitle: () => (
+                  <Image
+                    source={require('./assets/XWhite.png')}
+                    style={{ width: 35, height: 35 }}
+                    resizeMode="contain"
+                  />
+                ),
+                headerStyle: {
+                  backgroundColor: 'black',
+                },
+                headerTintColor: 'white',
+              }}
+            />
+
             <Stack.Screen
               name="Demo"
               component={Demo}
@@ -220,24 +240,7 @@ const App = () => {
               }}
             />
 
-            <Stack.Screen
-              name="Profile"
-              component={Profile}
-              options={{
-                headerTitleAlign: 'center',
-                headerTitle: () => (
-                  <Image
-                    source={require('./assets/XWhite.png')}
-                    style={{ width: 35, height: 35 }}
-                    resizeMode="contain"
-                  />
-                ),
-                headerStyle: {
-                  backgroundColor: 'black',
-                },
-                headerTintColor: 'white',
-              }}
-            />
+           
 
           </>
         )}
@@ -253,6 +256,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black', // Optional: set background color
+    backgroundColor: 'black',
   },
 });
