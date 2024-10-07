@@ -17,29 +17,29 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-const handleSignin = async () => {
-    setIsLoading(true);
-    setErrorMessage('');
+    const handleSignin = async () => {
+        setIsLoading(true);
+        setErrorMessage('');
 
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-        // Fetch user data from Firestore
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        const userData = userDoc.data();
+            // Fetch user data from Firestore
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            const userData = userDoc.data();
 
-        // Store user data (email and username) in AsyncStorage
-        await AsyncStorage.setItem('user', JSON.stringify(userData));
+            // Store user data (email and username) in AsyncStorage
+            await AsyncStorage.setItem('user', JSON.stringify(userData));
 
-        console.log('Sign in successful');
-        navigation.navigate('Main'); // Navigate to Main tabs
-    } catch (error) {
-        handleLoginError(error); // Handle error
-    } finally {
-        setIsLoading(false); // Ensure loading is stopped
-    }
-};
+            console.log('Sign in successful');
+            navigation.navigate('Main'); // Navigate to Main tabs
+        } catch (error) {
+            handleLoginError(error); // Handle error
+        } finally {
+            setIsLoading(false); // Ensure loading is stopped
+        }
+    };
 
 
     const handleLoginError = (error) => {

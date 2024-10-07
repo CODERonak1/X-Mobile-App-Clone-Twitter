@@ -121,7 +121,7 @@ const App = () => {
               options={{ headerShown: false }}
             />
 
-<Stack.Screen
+            <Stack.Screen
               name="Profile"
               component={Profile}
               options={{
@@ -140,7 +140,7 @@ const App = () => {
               }}
             />
 
-<Stack.Screen
+            <Stack.Screen
               name="Settings"
               component={Settings}
               options={({ navigation }) => ({
@@ -152,7 +152,7 @@ const App = () => {
                     resizeMode="contain"
                   />
                 ),
-              
+
                 headerRight: () => (
                   <Pressable
                     onPress={async () => {
@@ -164,7 +164,7 @@ const App = () => {
                         Alert.alert('Error', error.message);
                       }
                     }}
-                    // style={{ marginRight: 15 }}
+                  // style={{ marginRight: 15 }}
                   >
                     <Ionicons name="log-out-outline" size={26} color="white" />
                   </Pressable>

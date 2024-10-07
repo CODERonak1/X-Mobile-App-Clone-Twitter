@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { auth } from '../firebaseConfig';
-import { signInAnonymously } from 'firebase/auth'; 
+import { signInAnonymously } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 
 const LoginOrSignup = () => {
@@ -20,7 +20,7 @@ const LoginOrSignup = () => {
 
   return (
     <View style={styles.container}>
-     
+
       <Pressable onPress={handleAnonymousLogin} style={styles.anonymousButton} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
         <Text style={styles.buttonText}>Continue as Anonymous</Text>
       </Pressable>

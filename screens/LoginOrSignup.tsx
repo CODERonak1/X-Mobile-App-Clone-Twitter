@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         width: 35,
         margin: 'auto'
     },
-    
+
     btn: {
         // flex: 1
         position: 'relative',

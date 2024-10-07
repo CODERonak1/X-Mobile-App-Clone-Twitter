@@ -15,7 +15,7 @@ const Demo = () => {
             console.log('User signed out successfully');
             // Redirect to Sign In screen or Landing page
             navigation.navigate('LoginOrSignup');
-            
+
         } catch (error) {
             console.error('Logout Error:', error);
         }
@@ -23,9 +23,9 @@ const Demo = () => {
     return (
         <View style={styles.container}>
             {/* <Text style={styles.text}>demo</Text> */}
-            <Button 
-            onPress={handleLogout}
-            title="Logout"
+            <Button
+                onPress={handleLogout}
+                title="Logout"
             />
         </View>
     )

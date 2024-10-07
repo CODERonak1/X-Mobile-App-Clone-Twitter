@@ -35,10 +35,10 @@ const Signup = () => {
 
             // Add user info to Firestore with 'uid' as the document ID
             const userData = {
-                uid: user.uid,  
-                email: email,  
+                uid: user.uid,
+                email: email,
                 username: username,  // Include username in the userData
-                createdAt: serverTimestamp(),  
+                createdAt: serverTimestamp(),
             };
             await setDoc(doc(db, 'users', user.uid), userData);
 
