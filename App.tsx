@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native'; // Import ActivityIndicator
+import { StyleSheet, Text, View, Image, ActivityIndicator, Pressable, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -94,7 +94,7 @@ const App = () => {
         setUser(null);
         AsyncStorage.removeItem('user');
       }
-      setLoading(false); 
+      setLoading(false);
     });
 
     return () => {
@@ -102,7 +102,7 @@ const App = () => {
     };
   }, []);
 
-  if (loading) { 
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="white" />
@@ -112,7 +112,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={user ? "Main" : "LoginOrSignup"}>
+      <Stack.Navigator initialRouteName={user ? 'Main' : 'LoginOrSignup'}>
         {user ? (
           <>
             <Stack.Screen
@@ -143,7 +143,7 @@ const App = () => {
 <Stack.Screen
               name="Settings"
               component={Settings}
-              options={{
+              options={({ navigation }) => ({
                 headerTitleAlign: 'center',
                 headerTitle: () => (
                   <Image
@@ -152,12 +152,30 @@ const App = () => {
                     resizeMode="contain"
                   />
                 ),
+              
+                headerRight: () => (
+                  <Pressable
+                    onPress={async () => {
+                      try {
+                        await auth.signOut();
+                        AsyncStorage.removeItem('user');
+                        navigation.navigate('LoginOrSignup'); // navigate back
+                      } catch (error) {
+                        Alert.alert('Error', error.message);
+                      }
+                    }}
+                    // style={{ marginRight: 15 }}
+                  >
+                    <Ionicons name="log-out-outline" size={26} color="white" />
+                  </Pressable>
+                ),
                 headerStyle: {
                   backgroundColor: 'black',
                 },
                 headerTintColor: 'white',
-              }}
+              })}
             />
+
 
             <Stack.Screen
               name="Demo"
