@@ -7,6 +7,9 @@ const ProfileImg = () => {
 
   const openProfile = () => {
     navigation.navigate('Profile');
+    console.log("Opened Profile");
+    
+
   }
   return (
     <View style={styles.container}>

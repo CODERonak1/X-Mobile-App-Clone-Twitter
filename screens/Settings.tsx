@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         textAlign: 'center',
+        color: 'white',
+        fontWeight: 'bold',
     },
 });
 

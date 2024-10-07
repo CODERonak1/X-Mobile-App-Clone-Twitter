@@ -140,6 +140,25 @@ const App = () => {
               }}
             />
 
+<Stack.Screen
+              name="Settings"
+              component={Settings}
+              options={{
+                headerTitleAlign: 'center',
+                headerTitle: () => (
+                  <Image
+                    source={require('./assets/XWhite.png')}
+                    style={{ width: 35, height: 35 }}
+                    resizeMode="contain"
+                  />
+                ),
+                headerStyle: {
+                  backgroundColor: 'black',
+                },
+                headerTintColor: 'white',
+              }}
+            />
+
             <Stack.Screen
               name="Demo"
               component={Demo}
@@ -220,28 +239,6 @@ const App = () => {
                 headerTintColor: 'white',
               }}
             />
-
-            <Stack.Screen
-              name="Settings"
-              component={Settings}
-              options={{
-                headerTitleAlign: 'center',
-                headerTitle: () => (
-                  <Image
-                    source={require('./assets/XWhite.png')}
-                    style={{ width: 35, height: 35 }}
-                    resizeMode="contain"
-                  />
-                ),
-                headerStyle: {
-                  backgroundColor: 'black',
-                },
-                headerTintColor: 'white',
-              }}
-            />
-
-           
-
           </>
         )}
       </Stack.Navigator>
