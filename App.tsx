@@ -21,6 +21,8 @@ import Feed from './screens/Feed';
 import Messages from './screens/Messages';
 import Notifications from './screens/Notifications';
 import Search from './screens/Search';
+import Profile from './screens/Profile';
+import Settings from './screens/Settings';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -103,7 +105,7 @@ const App = () => {
   if (loading) { // Show loading indicator while determining auth state
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="white" /> 
+        <ActivityIndicator size="large" color="white" />
       </View>
     );
   }
@@ -198,6 +200,45 @@ const App = () => {
                 headerTintColor: 'white',
               }}
             />
+
+            <Stack.Screen
+              name="Settings"
+              component={Settings}
+              options={{
+                headerTitleAlign: 'center',
+                headerTitle: () => (
+                  <Image
+                    source={require('./assets/XWhite.png')}
+                    style={{ width: 35, height: 35 }}
+                    resizeMode="contain"
+                  />
+                ),
+                headerStyle: {
+                  backgroundColor: 'black',
+                },
+                headerTintColor: 'white',
+              }}
+            />
+
+            <Stack.Screen
+              name="Profile"
+              component={Profile}
+              options={{
+                headerTitleAlign: 'center',
+                headerTitle: () => (
+                  <Image
+                    source={require('./assets/XWhite.png')}
+                    style={{ width: 35, height: 35 }}
+                    resizeMode="contain"
+                  />
+                ),
+                headerStyle: {
+                  backgroundColor: 'black',
+                },
+                headerTintColor: 'white',
+              }}
+            />
+
           </>
         )}
       </Stack.Navigator>
