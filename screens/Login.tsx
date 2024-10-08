@@ -1,3 +1,4 @@
+// imports
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -9,20 +10,22 @@ import { getDoc } from 'firebase/firestore';
 import { doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
+// Login 
 const Login = () => {
-    const navigation = useNavigation();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isFocusedInput, setIsFocusedInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const navigation = useNavigation(); // Hook for navigation
+    const [email, setEmail] = useState(''); // State for email input
+    const [password, setPassword] = useState(''); // State for password input
+    const [isFocusedInput, setIsFocusedInput] = useState(''); // State for input focus
+    const [isLoading, setIsLoading] = useState(false); // State for loading indicator
+    const [errorMessage, setErrorMessage] = useState(''); // State for error messages
 
+    // Function to handle user sign-in
     const handleSignin = async () => {
-        setIsLoading(true);
-        setErrorMessage('');
+        setIsLoading(true); // Start loading
+        setErrorMessage(''); // Clear error messages
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password); // Authenticate user
             const user = userCredential.user;
 
             // Fetch user data from Firestore
@@ -41,25 +44,25 @@ const Login = () => {
         }
     };
 
-
+    // Function to handle login errors
     const handleLoginError = (error) => {
         if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
             setErrorMessage('The email or password you entered is incorrect.');
         } else {
             setErrorMessage('An unexpected error occurred. Please try again.');
         }
-        console.log('Sign in Error:', error);
+        console.log('Sign in Error:', error); // Log the error for debugging
     };
 
     return (
         <SafeAreaView style={styles.background}>
             {isLoading ? (
                 <View style={styles.loadingContainer}>
-                    <Text style={styles.loadingText}>Loading...</Text>
+                    <Text style={styles.loadingText}>Loading...</Text> {/* Show loading text */}
                 </View>
             ) : (
                 <>
-                    <Text style={styles.text}>To Login, first enter your email and password.</Text>
+                    <Text style={styles.text}>To Login, first enter your email and password.</Text> {/* Login instructions */}
                     <View style={styles.container}>
                         <TextInput
                             style={[styles.input, isFocusedInput === 'email' && styles.focusInput]}
@@ -69,8 +72,8 @@ const Login = () => {
                             placeholderTextColor="gray"
                             keyboardType="email-address"
                             cursorColor={'#3493d6'}
-                            onFocus={() => setIsFocusedInput('email')}
-                            onBlur={() => setIsFocusedInput('')}
+                            onFocus={() => setIsFocusedInput('email')} // Set focus to email input
+                            onBlur={() => setIsFocusedInput('')} // Remove focus from input
                         />
                         <TextInput
                             style={[styles.input, isFocusedInput === 'password' && styles.focusInput]}
@@ -79,12 +82,12 @@ const Login = () => {
                             onChangeText={setPassword}
                             placeholderTextColor="gray"
                             cursorColor={'#3493d6'}
-                            secureTextEntry={true}
-                            onFocus={() => setIsFocusedInput('password')}
-                            onBlur={() => setIsFocusedInput('')}
+                            secureTextEntry={true} // Enable secure input for passwords
+                            onFocus={() => setIsFocusedInput('password')} // Set focus to password input
+                            onBlur={() => setIsFocusedInput('')} // Remove focus from input
                         />
-                        <Text style={styles.errorText}>{errorMessage}</Text>
-                        <Pressable style={styles.loginBtn} onPress={handleSignin}>
+                        <Text style={styles.errorText}>{errorMessage}</Text> {/* Display error message */}
+                        <Pressable style={styles.loginBtn} onPress={handleSignin}> {/* Login button */}
                             <Text style={styles.loginBtnText}>Log In</Text>
                         </Pressable>
                     </View>
