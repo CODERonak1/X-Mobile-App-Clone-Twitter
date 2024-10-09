@@ -10,9 +10,9 @@ const LoginOrSignup = () => {
   // Function to handle anonymous login
   const handleAnonymousLogin = async () => {
     try {
-      const userCredential = await signInAnonymously(auth); // Correct method call
+      const userCredential = await signInAnonymously(auth); 
       console.log('Anonymous User signed in!', userCredential.user);
-      navigation.navigate('Demo'); // Navigate to Demo screen or your main app screen
+      navigation.navigate('Main'); 
     } catch (error) {
       console.error('Anonymous login failed:', error);
     }
