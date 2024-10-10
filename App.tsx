@@ -1,5 +1,5 @@
 // imports
-import { StyleSheet, Text, View, Image, ActivityIndicator, Pressable, Alert } from 'react-native';
+import { StyleSheet, View, Image, ActivityIndicator, Pressable, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

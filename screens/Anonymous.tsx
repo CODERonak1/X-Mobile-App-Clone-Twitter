@@ -21,6 +21,8 @@ const LoginOrSignup = () => {
   return (
     <View style={styles.container}>
 
+      
+
       <Pressable onPress={handleAnonymousLogin} style={styles.anonymousButton} android_ripple={{ color: '#00000035', borderless: false, foreground: true }}>
         <Text style={styles.buttonText}>Continue as Anonymous</Text>
       </Pressable>

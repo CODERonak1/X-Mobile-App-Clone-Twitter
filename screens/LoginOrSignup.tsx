@@ -21,7 +21,6 @@ const LoginOrSignup = () => {
             <View style={styles.container}>
                 {/* Main header text */}
                 <Text style={styles.text}>See what's happening in the world right now.</Text>
-                <Text></Text> {/* Empty Text component */}
             </View>
 
             <View style={styles.btn}>
